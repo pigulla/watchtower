@@ -1,0 +1,21 @@
+{
+  "openTab": "Attack Upgrades",
+  "isMenuOpen": true,
+  "wave": 1202,
+  "isGameOver": false,
+  "cash": "188480000",
+  "gemCount": 0,
+  "coins": "69440000000",
+  "isAdGemAvailable": true,
+  "isNewPerkAvailable": false,
+  "buyMultiplier": "x5",
+  "upgradeCost": {
+    "attack": {
+      "Damage": "849900",
+      "Critical Chance": "Max",
+      "Attack Speed": "Max",
+      "Critical Factor": "Max"
+    },
+    "defense": null
+  }
+}

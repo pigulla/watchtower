@@ -1,0 +1,7 @@
+{
+  "ignores": [
+    "@swc-node/register",
+    "eslint-plugin-prettier",
+    "sort-package-json"
+  ]
+}

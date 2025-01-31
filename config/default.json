@@ -1,0 +1,16 @@
+{
+  "logLevel": "debug",
+  "delayInSeconds": 180,
+  "theTowerApplication": {
+    "titleBarHeight": 33,
+    "name": "TheTower",
+    "title": "The Tower"
+  },
+  "binaries": {
+    "afplay": "/usr/bin/afplay",
+    "cliclick": "/opt/homebrew/bin/cliclick",
+    "osascript": "/usr/bin/osascript",
+    "pngpaste": "/opt/homebrew/bin/pngpaste",
+    "screencapture": "/usr/sbin/screencapture"
+  }
+}
