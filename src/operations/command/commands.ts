@@ -1,4 +1,6 @@
-import { Injections } from './action'
+import { Injections } from '../injections'
+import { Queries } from '../query/queries'
+
 import {
     type CollectFloatingGem,
     collectFloatingGemFactory,
@@ -14,16 +16,19 @@ import {
 } from './purchase-upgrades'
 import { EnsureTabIsOpen, ensureTabIsOpenFactory } from './ensure-tab-is-open'
 
-export type Actions = {
-    collectFloatingGem: CollectFloatingGem
-    collectAdGem: CollectAdGem
-    checkNewPerkAvailability: CheckNewPerkAvailability
-    purchaseUpgrades: PurchaseUpgrades
-    ensureTabIsOpen: EnsureTabIsOpen
+export type Commands = {
+    readonly collectFloatingGem: CollectFloatingGem
+    readonly collectAdGem: CollectAdGem
+    readonly checkNewPerkAvailability: CheckNewPerkAvailability
+    readonly purchaseUpgrades: PurchaseUpgrades
+    readonly ensureTabIsOpen: EnsureTabIsOpen
 }
 
-export function actionsFactory(injections: Injections): Actions {
-    const ensureTabIsOpen = ensureTabIsOpenFactory(injections)
+export function commandsFactory(
+    injections: Injections,
+    queries: Queries,
+): Commands {
+    const ensureTabIsOpen = ensureTabIsOpenFactory(injections, queries)
 
     return {
         collectFloatingGem: collectFloatingGemFactory(injections),

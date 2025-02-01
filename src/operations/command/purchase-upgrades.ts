@@ -1,12 +1,14 @@
-import type { Action, Injections } from './action'
 import type { Sharp } from 'sharp'
 
-import { tabOf, Upgrade } from '../types'
-import { uiConfig } from '../ui-config'
-import { OCRMode } from '../ocr.interface'
-import { parseNumber } from '../util/parse-number'
+import type { Injections } from '../injections'
+import { tabOf, Upgrade } from '../../types'
+import { uiConfig } from '../../ui-config'
+import { OCRMode } from '../../ocr.interface'
+import { parseNumber } from '../../util/parse-number'
 import type { EnsureTabIsOpen } from './ensure-tab-is-open'
-import { centerOf } from '../util/center-of'
+import { centerOf } from '../../util/center-of'
+
+import type { Command } from './command'
 
 export enum PurchaseStrategy {
     SEQUENTIAL = 'sequential',
@@ -14,8 +16,7 @@ export enum PurchaseStrategy {
     RANDOM = 'random',
 }
 
-export interface PurchaseUpgrades
-    extends Action<[PurchaseStrategy, readonly Upgrade[]]> {}
+export type PurchaseUpgrades = Command<[PurchaseStrategy, readonly Upgrade[]]>
 
 export function purchaseUpgradesFactory(
     { getText, takeScreenshot, clickAt, logger }: Injections,

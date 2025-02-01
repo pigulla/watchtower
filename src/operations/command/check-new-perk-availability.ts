@@ -1,11 +1,13 @@
-import type { Action, Injections } from './action'
 import type { Sharp } from 'sharp'
 
-import { Sound } from '../types'
-import { uiConfig } from '../ui-config'
-import { LETTERS, OCRMode } from '../ocr.interface'
+import { Sound } from '../../types'
+import { uiConfig } from '../../ui-config'
+import { LETTERS, OCRMode } from '../../ocr.interface'
+import { Injections } from '../injections'
 
-export interface CheckNewPerkAvailability extends Action {}
+import type { Command } from './command'
+
+export type CheckNewPerkAvailability = Command
 
 export function checkNewPerkAvailabilityFactory({
     getText,

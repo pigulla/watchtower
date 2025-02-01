@@ -24,6 +24,10 @@ export default [
     ...tseslint.configs.strictTypeChecked,
     {
         rules: {
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                { argsIgnorePattern: '^_' },
+            ],
             '@typescript-eslint/no-empty-object-type': 'off',
             '@typescript-eslint/restrict-template-expressions': [
                 'error',

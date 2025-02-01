@@ -1,13 +1,15 @@
-import type { Action, Injections } from './action'
 import type { Sharp } from 'sharp'
 
+import type { Injections } from '../injections'
 import {
     type ApplicationPosition,
     asApplicationPosition,
-} from '../util/position'
-import { uiConfig } from '../ui-config'
+} from '../../util/position'
+import { uiConfig } from '../../ui-config'
 
-export interface CollectFloatingGem extends Action {}
+import type { Command } from './command'
+
+export type CollectFloatingGem = Command
 
 // Returns a half-arc in counterclockwise direction. That should catch the gem fairly reliably.
 export function getFloatingGemPath({

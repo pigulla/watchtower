@@ -1,13 +1,14 @@
-import type { Action, Injections } from './action'
+import type { Command } from './command'
+import type { Injections } from '../injections'
 import type { Sharp } from 'sharp'
 
-import { uiConfig } from '../ui-config'
-import type { Region } from '../util/region'
-import { OCRMode, UPPERCASE_LETTERS } from '../ocr.interface'
-import { Sound } from '../types'
-import { centerOf } from '../util/center-of'
+import { uiConfig } from '../../ui-config'
+import type { Region } from '../../util/region'
+import { OCRMode, UPPERCASE_LETTERS } from '../../ocr.interface'
+import { Sound } from '../../types'
+import { centerOf } from '../../util/center-of'
 
-export interface CollectAdGem extends Action {}
+export type CollectAdGem = Command
 
 export function collectAdGemFactory({
     clickAt,
