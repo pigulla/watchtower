@@ -8,6 +8,7 @@ import {
 import { uiConfig } from '../../ui-config'
 
 import type { Command } from './command'
+import { Queries } from '../query/queries'
 
 export type CollectFloatingGem = Command
 
@@ -33,18 +34,17 @@ export function getFloatingGemPath({
         .reverse()
 }
 
-export function collectFloatingGemFactory({
-    clickAt,
-    isTabsOpen,
-    logger,
-}: Injections): CollectFloatingGem {
+export function collectFloatingGemFactory(
+    { clickAt, logger }: Injections,
+    { getOpenTab }: Queries,
+): CollectFloatingGem {
     return async function collectFloatingGem(
         screenshot: Sharp,
     ): Promise<Sharp> {
         logger.debug('Trying to collect floating gem')
 
         for (const position of getFloatingGemPath({
-            isTabsOpen: await isTabsOpen(),
+            isTabsOpen: (await getOpenTab(screenshot)) !== null,
         })) {
             await clickAt(position)
         }

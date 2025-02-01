@@ -19,6 +19,7 @@ import {
     isApplicationActiveFactory,
 } from './is-application-active'
 import { GetNumber, getNumberFactory } from './get-number'
+import { activateApplicationFactory } from './activate-application'
 
 export type Externals = {
     clickAt: ClickAt
@@ -29,6 +30,7 @@ export type Externals = {
     playSound: PlaySound
     takeScreenshot: TakeScreenshot
     stop: () => Promise<void>
+    activateApplication: () => Promise<void>
 }
 
 export function factory({
@@ -54,6 +56,7 @@ export function factory({
         takeScreenshot: takeScreenshotFactory({
             config,
             getWindowPosition,
+            getText,
             logger,
         }),
         moveCursorTo,
@@ -69,5 +72,6 @@ export function factory({
         getText,
         stop,
         getNumber: getNumberFactory({ getText, logger }),
+        activateApplication: activateApplicationFactory({ config, logger }),
     }
 }

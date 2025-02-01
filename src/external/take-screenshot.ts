@@ -1,23 +1,28 @@
+import { ConsolaInstance } from 'consola'
+import { execa } from 'execa'
 import sharp, { Sharp } from 'sharp'
 
 import { TakeScreenshot } from '../operations/injections'
-import { Config } from './config'
-import { ConsolaInstance } from 'consola'
-import { GetWindowPosition } from './get-window-position'
-import { execa } from 'execa'
 import { Position } from '../util/position'
 
+import { GetWindowPosition } from './get-window-position'
+import { Config } from './config'
+import { GetText } from './get-text'
+import { LETTERS, OCRMode } from '../ocr.interface'
+
 export function takeScreenshotFactory({
-    config,
+    config: { binary, application },
     getWindowPosition,
+    getText,
     logger,
 }: {
     config: Config
     getWindowPosition: GetWindowPosition
+    getText: GetText
     logger: ConsolaInstance
 }): TakeScreenshot {
     const log = logger.withTag('takeScreenshot')
-    const { width, height } = config.application.size
+    const { width, height } = application.size
 
     async function captureApplicationWindowToClipboard({
         x,
@@ -25,18 +30,16 @@ export function takeScreenshotFactory({
     }: Position): Promise<void> {
         const params = [`-R${x},${y},${width},${height}`, '-tpng', '-c']
         log.trace(
-            `Executing command '${config.binary.screencapture} ${params.join(' ')}'`,
+            `Executing command '${binary.screencapture} ${params.join(' ')}'`,
         )
-        await execa(config.binary.screencapture, params)
+        await execa(binary.screencapture, params)
     }
 
     async function loadScreenshotFromClipboard(): Promise<Uint8Array> {
         const params = ['-']
-        log.trace(
-            `Executing command '${config.binary.pngpaste} ${params.join(' ')}'`,
-        )
+        log.trace(`Executing command '${binary.pngpaste} ${params.join(' ')}'`)
 
-        const { stdout } = await execa(config.binary.pngpaste, params, {
+        const { stdout } = await execa(binary.pngpaste, params, {
             encoding: 'buffer',
         })
 
@@ -52,7 +55,20 @@ export function takeScreenshotFactory({
 
         await captureApplicationWindowToClipboard({ x, y })
         const buffer = await loadScreenshotFromClipboard()
+        const screenshot = sharp(buffer)
 
-        return sharp(buffer)
+        const title = await getText(
+            screenshot,
+            { left: 500, top: 5, width: width * 2 - 2 * 500, height: 50 },
+            { mode: OCRMode.SINGLE_LINE, characters: LETTERS },
+        )
+
+        if (title !== application.title) {
+            throw new Error(
+                `Expected to find application title '${application.title}' in screenshot`,
+            )
+        }
+
+        return screenshot
     }
 }

@@ -1,42 +1,11 @@
-import { Injections } from '../injections'
-import { Queries } from '../query/queries'
-
-import {
-    type CollectFloatingGem,
-    collectFloatingGemFactory,
-} from './collect-floating-gem'
-import { type CollectAdGem, collectAdGemFactory } from './collect-ad-gem'
-import {
-    type CheckNewPerkAvailability,
-    checkNewPerkAvailabilityFactory,
-} from './check-new-perk-availability'
-import {
-    type PurchaseUpgrades,
-    purchaseUpgradesFactory,
-} from './purchase-upgrades'
-import { EnsureTabIsOpen, ensureTabIsOpenFactory } from './ensure-tab-is-open'
+import type { CollectAdGem } from './collect-ad-gem'
+import type { CollectFloatingGem } from './collect-floating-gem'
+import type { EnsureTabIsOpen } from './ensure-tab-is-open'
+import type { PurchaseUpgrades } from './purchase-upgrades'
 
 export type Commands = {
-    readonly collectFloatingGem: CollectFloatingGem
     readonly collectAdGem: CollectAdGem
-    readonly checkNewPerkAvailability: CheckNewPerkAvailability
-    readonly purchaseUpgrades: PurchaseUpgrades
+    readonly collectFloatingGem: CollectFloatingGem
     readonly ensureTabIsOpen: EnsureTabIsOpen
-}
-
-export function commandsFactory(
-    injections: Injections,
-    queries: Queries,
-): Commands {
-    const ensureTabIsOpen = ensureTabIsOpenFactory(injections, queries)
-
-    return {
-        collectFloatingGem: collectFloatingGemFactory(injections),
-        collectAdGem: collectAdGemFactory(injections),
-        checkNewPerkAvailability: checkNewPerkAvailabilityFactory(injections),
-        purchaseUpgrades: purchaseUpgradesFactory(injections, {
-            ensureTabIsOpen,
-        }),
-        ensureTabIsOpen,
-    }
+    readonly purchaseUpgrades: PurchaseUpgrades
 }

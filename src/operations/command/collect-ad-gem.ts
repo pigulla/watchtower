@@ -49,13 +49,14 @@ export function collectAdGemFactory({
         const region = await getAdGemButtonRegion(screenshot)
 
         if (!region) {
+            logger.verbose(`No ad gem detected`)
             return screenshot
         }
 
         logger.success('Ad gem detected')
-        await playSound(Sound.GEM_COLLECTED)
         const position = centerOf(region)
         await clickAt(position)
+        await playSound(Sound.GEM_COLLECTED)
 
         return takeScreenshot()
     }

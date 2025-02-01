@@ -19,7 +19,7 @@ export function playSoundFactory({
 
     return async function playSound(sound: Sound): Promise<void> {
         const file = join(config.sound.directory, sound)
-        const params = [file, config.sound.volume.toString()]
+        const params = [file, '--volume', config.sound.volume.toString()]
         log.trace(
             `Executing command '${config.binary.afplay} ${params.join(' ')}'`,
         )
