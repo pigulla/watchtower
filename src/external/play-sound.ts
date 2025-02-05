@@ -3,10 +3,11 @@ import { join } from 'node:path'
 import { ConsolaInstance } from 'consola'
 import { execa } from 'execa'
 
-import { PlaySound } from '../operations/injections'
 import { Sound } from '../types'
 
 import { Config } from './config'
+
+export type PlaySound = (sound: Sound) => Promise<void>
 
 export function playSoundFactory({
     config,

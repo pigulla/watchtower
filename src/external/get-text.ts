@@ -14,7 +14,11 @@ import {
 export type GetText = (
     image: Sharp,
     region: Region,
-    options?: { mode?: OCRMode; characters?: CharacterSet | string },
+    options?: {
+        mode?: OCRMode
+        characters?: CharacterSet | string
+        threshold?: number
+    },
 ) => Promise<string>
 
 const characterSetMap = {
@@ -46,6 +50,7 @@ export function getTextFactory({ logger }: { logger: ConsolaInstance }): {
         options?: {
             mode?: OCRMode
             characters?: CharacterSet | string
+            threshold?: number
         },
     ): Promise<string> {
         const worker = await workerPromise
@@ -58,7 +63,12 @@ export function getTextFactory({ logger }: { logger: ConsolaInstance }): {
                   ? undefined
                   : characterSetMap[options.characters]
 
-        const result = await worker.recognize(await image.toBuffer(), {
+        const input =
+            options?.threshold === undefined
+                ? image
+                : image.clone().threshold(options.threshold)
+
+        const result = await worker.recognize(await input.toBuffer(), {
             rectangle: region,
             // See https://github.com/naptha/tesseract.js/issues/856
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment

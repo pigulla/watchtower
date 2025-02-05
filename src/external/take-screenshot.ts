@@ -2,13 +2,14 @@ import { ConsolaInstance } from 'consola'
 import { execa } from 'execa'
 import sharp, { Sharp } from 'sharp'
 
-import { TakeScreenshot } from '../operations/injections'
 import { Position } from '../util/position'
 
 import { GetWindowPosition } from './get-window-position'
 import { Config } from './config'
 import { GetText } from './get-text'
 import { LETTERS, OCRMode } from '../ocr.interface'
+
+export type TakeScreenshot = () => Promise<Sharp>
 
 export function takeScreenshotFactory({
     config: { binary, application },

@@ -7,7 +7,11 @@ import { parseNumber } from '../util/parse-number'
 
 import { GetText } from './get-text'
 
-export type GetNumber = (image: Sharp, region: Region) => Promise<bigint | null>
+export type GetNumber = (
+    image: Sharp,
+    region: Region,
+    options?: { threshold?: number },
+) => Promise<bigint | null>
 
 export function fixOcrNumber(input: string): string {
     if (input.length === 0) {
@@ -45,11 +49,16 @@ export function getNumberFactory({
     return async function getNumber(
         image: Sharp,
         region: Region,
+        options?: { threshold?: number },
     ): Promise<bigint | null> {
-        const text = await getText(image.clone().threshold(192), region, {
-            mode: OCRMode.SINGLE_LINE,
-            characters: '1234567890.KMBTqQsSOND',
-        })
+        const text = await getText(
+            image.clone().threshold(options?.threshold ?? 192),
+            region,
+            {
+                mode: OCRMode.SINGLE_LINE,
+                characters: '1234567890.KMBTqQsSOND',
+            },
+        )
 
         if (text.length === 0) {
             return null

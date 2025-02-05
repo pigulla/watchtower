@@ -1,12 +1,15 @@
-import { ClickAt } from '../operations/injections'
-import { Position } from '../util/position'
-import { GetWindowPosition } from './get-window-position'
 import { ConsolaInstance } from 'consola'
-import { Config } from './config'
 import { execa } from 'execa'
+
+import { Position } from '../util/position'
+
+import { Config } from './config'
+import { GetWindowPosition } from './get-window-position'
 
 // TODO: Move to config
 const RETINA_SCALE = 2
+
+export type MoveCursorTo = (position: Position) => Promise<void>
 
 export function moveCursorToFactory({
     config,
@@ -16,7 +19,7 @@ export function moveCursorToFactory({
     config: Config
     getWindowPosition: GetWindowPosition
     logger: ConsolaInstance
-}): ClickAt {
+}): MoveCursorTo {
     const log = logger.withTag('moveCursorTo')
 
     return async function moveCursorTo({ x, y }: Position): Promise<void> {

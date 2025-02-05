@@ -9,11 +9,11 @@ export type GetGems = Query<number | null>
 
 export function getGemsFactory({ getText }: Injections): GetGems {
     return async function getGems(screenshot: Sharp): Promise<number | null> {
-        const text = await getText(
-            screenshot.clone().threshold(192),
-            uiConfig.stats.gemCounter,
-            { mode: OCRMode.SINGLE_WORD, characters: DIGITS },
-        )
+        const text = await getText(screenshot, uiConfig.stats.gemCounter, {
+            mode: OCRMode.SINGLE_WORD,
+            characters: DIGITS,
+            threshold: 192,
+        })
 
         if (/^\d+$/.test(text)) {
             return Number.parseInt(text)

@@ -4,7 +4,7 @@
   "wave": null,
   "isGameOver": true,
   "cash": null,
-  "gemCount": null,
+  "gems": null,
   "coins": null,
   "isAdGemAvailable": false,
   "isNewPerkAvailable": false,

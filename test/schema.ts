@@ -12,7 +12,7 @@ export const schema = z
         wave: z.number().int().min(1).nullable(),
         cash: z.string().regex(/^\d+$/).nullable(),
         coins: z.string().regex(/^\d+$/).nullable(),
-        gemCount: z.number().int().min(0).nullable(),
+        gems: z.number().int().min(0).nullable(),
         isAdGemAvailable: z.boolean(),
         isNewPerkAvailable: z.boolean(),
         buyMultiplier: z.nativeEnum(BuyMultiplier).nullable(),

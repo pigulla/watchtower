@@ -21,6 +21,8 @@ export enum Sound {
 
 export type Upgrade = AttackUpgrade | DefenseUpgrade
 
+export const UPGRADE_MAXED = Symbol('upgrade-maxed')
+
 export function tabOf(upgrade: Upgrade): Tab {
     if (Object.values<string>(AttackUpgrade).includes(upgrade)) {
         return Tab.ATTACK_UPGRADES

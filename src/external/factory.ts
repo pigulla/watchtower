@@ -1,36 +1,31 @@
-import {
-    ClickAt,
-    MoveCursorTo,
-    PlaySound,
-    TakeScreenshot,
-} from '../operations/injections'
+import { type ConsolaInstance } from 'consola'
+
 import { Position } from '../util/position'
 
 import { getWindowPositionFactory } from './get-window-position'
-import { Config } from './config'
-import { ConsolaInstance } from 'consola'
-import { takeScreenshotFactory } from './take-screenshot'
+import { type Config } from './config'
+import { type TakeScreenshot, takeScreenshotFactory } from './take-screenshot'
 import { clickFactory } from './click'
-import { moveCursorToFactory } from './move-cursor-to'
-import { playSoundFactory } from './play-sound'
-import { GetText, getTextFactory } from './get-text'
+import { type MoveCursorTo, moveCursorToFactory } from './move-cursor-to'
+import { type PlaySound, playSoundFactory } from './play-sound'
+import { type GetText, getTextFactory } from './get-text'
 import {
-    IsApplicationActive,
+    type IsApplicationActive,
     isApplicationActiveFactory,
 } from './is-application-active'
-import { GetNumber, getNumberFactory } from './get-number'
+import { type GetNumber, getNumberFactory } from './get-number'
 import { activateApplicationFactory } from './activate-application'
 
 export type Externals = {
-    clickAt: ClickAt
+    activateApplication: () => Promise<void>
+    clickAt: (position: Position) => Promise<void>
     getNumber: GetNumber
     getText: GetText
     isApplicationActive: IsApplicationActive
     moveCursorTo: MoveCursorTo
     playSound: PlaySound
-    takeScreenshot: TakeScreenshot
     stop: () => Promise<void>
-    activateApplication: () => Promise<void>
+    takeScreenshot: TakeScreenshot
 }
 
 export function factory({

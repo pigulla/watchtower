@@ -8,6 +8,6 @@ export type GetCoins = Query<bigint | null>
 
 export function getCoinsFactory({ getNumber }: Injections): GetCoins {
     return async function getCoins(screenshot: Sharp): Promise<bigint | null> {
-        return getNumber(screenshot, uiConfig.stats.coins)
+        return getNumber(screenshot, uiConfig.stats.coins, { threshold: 192 })
     }
 }

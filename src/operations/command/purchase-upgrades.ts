@@ -12,7 +12,7 @@ import type { Command } from './command'
 
 export enum PurchaseStrategy {
     SEQUENTIAL = 'sequential',
-    UNIFORM = 'uniform',
+    ROUND_ROBIN = 'uniform',
     RANDOM = 'random',
 }
 
