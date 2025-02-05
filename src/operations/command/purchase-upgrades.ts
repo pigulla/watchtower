@@ -12,14 +12,15 @@ import type { Command } from './command'
 
 export enum PurchaseStrategy {
     SEQUENTIAL = 'sequential',
-    ROUND_ROBIN = 'uniform',
+    ROUND_ROBIN = 'round robin',
+    CHEAPEST_FIRST = 'cheapest first',
     RANDOM = 'random',
 }
 
 export type PurchaseUpgrades = Command<[PurchaseStrategy, readonly Upgrade[]]>
 
 export function purchaseUpgradesFactory(
-    { getText, takeScreenshot, clickAt, logger }: Injections,
+    { getText, takeScreenshot, click, logger }: Injections,
     { ensureTabIsOpen }: { ensureTabIsOpen: EnsureTabIsOpen },
 ): PurchaseUpgrades {
     const MAXED = Symbol('max')
@@ -82,7 +83,7 @@ export function purchaseUpgradesFactory(
             } else {
                 logger.info(`Purchasing upgrade '${upgrade}'`)
                 const position = centerOf(uiConfig.tabs.upgrades[upgrade].cost)
-                await clickAt(position)
+                await click(position)
                 screenshot = await takeScreenshot()
                 break
             }

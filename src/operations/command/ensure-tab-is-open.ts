@@ -11,7 +11,7 @@ import type { Command } from './command'
 export type EnsureTabIsOpen = Command<[Tab]>
 
 export function ensureTabIsOpenFactory(
-    { clickAt, takeScreenshot, logger }: Injections,
+    { click, takeScreenshot, logger }: Injections,
     { getOpenTab }: Queries,
 ): EnsureTabIsOpen {
     return async function ensureTabIsOpen(
@@ -26,7 +26,7 @@ export function ensureTabIsOpenFactory(
             return screenshot
         }
 
-        await clickAt(centerOf(uiConfig.tabs.buttons[tab]))
+        await click(centerOf(uiConfig.tabs.buttons[tab]))
         screenshot = await takeScreenshot()
 
         if ((await getOpenTab(screenshot)) !== tab) {

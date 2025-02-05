@@ -1,11 +1,9 @@
 import { type ConsolaInstance } from 'consola'
 
-import { Position } from '../util/position'
-
 import { getWindowPositionFactory } from './get-window-position'
 import { type Config } from './config'
 import { type TakeScreenshot, takeScreenshotFactory } from './take-screenshot'
-import { clickFactory } from './click'
+import { type Click, clickFactory } from './click'
 import { type MoveCursorTo, moveCursorToFactory } from './move-cursor-to'
 import { type PlaySound, playSoundFactory } from './play-sound'
 import { type GetText, getTextFactory } from './get-text'
@@ -18,7 +16,7 @@ import { activateApplicationFactory } from './activate-application'
 
 export type Externals = {
     activateApplication: () => Promise<void>
-    clickAt: (position: Position) => Promise<void>
+    click: Click
     getNumber: GetNumber
     getText: GetText
     isApplicationActive: IsApplicationActive
@@ -39,8 +37,8 @@ export function factory({
         config,
         logger,
     })
-    const click = clickFactory({ config, logger })
     const { getText, stop } = getTextFactory({ logger })
+    const click = clickFactory({ config, getWindowPosition, logger })
     const moveCursorTo = moveCursorToFactory({
         config,
         getWindowPosition,
@@ -55,10 +53,7 @@ export function factory({
             logger,
         }),
         moveCursorTo,
-        async clickAt(position: Position): Promise<void> {
-            await moveCursorTo(position)
-            await click()
-        },
+        click,
         playSound: playSoundFactory({
             config,
             logger: logger,

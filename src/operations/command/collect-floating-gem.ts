@@ -35,7 +35,7 @@ export function getFloatingGemPath({
 }
 
 export function collectFloatingGemFactory(
-    { clickAt, logger }: Injections,
+    { click, logger }: Injections,
     { getOpenTab }: Queries,
 ): CollectFloatingGem {
     return async function collectFloatingGem(
@@ -46,7 +46,7 @@ export function collectFloatingGemFactory(
         for (const position of getFloatingGemPath({
             isTabsOpen: (await getOpenTab(screenshot)) !== null,
         })) {
-            await clickAt(position)
+            await click(position)
         }
 
         return screenshot

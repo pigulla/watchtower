@@ -11,7 +11,7 @@ import { centerOf } from '../../util/center-of'
 export type CollectAdGem = Command
 
 export function collectAdGemFactory({
-    clickAt,
+    click,
     getText,
     playSound,
     takeScreenshot,
@@ -55,7 +55,7 @@ export function collectAdGemFactory({
 
         logger.success('Ad gem detected')
         const position = centerOf(region)
-        await clickAt(position)
+        await click(position)
         await playSound(Sound.GEM_COLLECTED)
 
         return takeScreenshot()
