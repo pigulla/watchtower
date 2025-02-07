@@ -19,6 +19,11 @@ export enum Sound {
     PERK_AVAILABLE = 'perk-available.mp3',
 }
 
+export enum Event {
+    PERK_AVAILABLE = 'perk-available',
+    AD_GEM_AVAILABLE = 'ad-gem-available',
+}
+
 export type Upgrade = AttackUpgrade | DefenseUpgrade
 
 export const UPGRADE_MAXED = Symbol('upgrade-maxed')
