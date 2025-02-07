@@ -1,12 +1,14 @@
 {
-  "logLevel": "debug",
-  "delayInSeconds": 180,
-  "theTowerApplication": {
-    "titleBarHeight": 33,
+  "application": {
+    "title": "The Tower",
     "name": "TheTower",
-    "title": "The Tower"
+    "isRetina": true,
+    "size": {
+      "width": 788,
+      "height": 1079
+    }
   },
-  "binaries": {
+  "binary": {
     "afplay": "/usr/bin/afplay",
     "cliclick": "/opt/homebrew/bin/cliclick",
     "osascript": "/usr/bin/osascript",

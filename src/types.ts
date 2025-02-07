@@ -17,6 +17,7 @@ export enum Sound {
     GEM_COLLECTED = 'gem-collected.wav',
     START = 'start.mp3',
     PERK_AVAILABLE = 'perk-available.mp3',
+    AD_GEM_AVAILABLE = 'perk-available.mp3',
 }
 
 export enum Event {

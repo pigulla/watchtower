@@ -1,7 +1,7 @@
 import { ConsolaInstance } from 'consola'
 import { execa } from 'execa'
 
-import { Config } from './config'
+import { Config } from '../config'
 
 export type IsApplicationActive = () => Promise<boolean>
 

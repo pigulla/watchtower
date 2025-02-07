@@ -7,7 +7,7 @@ export const interval = new Option(
     '-i, --interval <seconds>',
     'interval between iterations',
 )
-    .default(180)
+    .default(dayjs.duration(180, 'seconds'), '180')
     .argParser<Duration>((input, _) => {
         if (!/^[-+]?\d+$/.test(input)) {
             throw new InvalidOptionArgumentError('Integer expected.')

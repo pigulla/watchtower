@@ -2,7 +2,7 @@ import { execa } from 'execa'
 
 import { Position } from '../util/position'
 
-import { Config } from './config'
+import { Config } from '../config'
 import { ConsolaInstance } from 'consola'
 
 export type GetWindowPosition = () => Promise<Position>

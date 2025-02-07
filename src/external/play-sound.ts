@@ -1,11 +1,20 @@
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
 
 import { ConsolaInstance } from 'consola'
 import { execa } from 'execa'
 
 import { Sound } from '../types'
 
-import { Config } from './config'
+import { Config } from '../config'
+import { fileURLToPath } from 'node:url'
+
+const SOUND_DIR = join(
+    dirname(fileURLToPath(import.meta.url)),
+    '..',
+    '..',
+    '..',
+    'sounds',
+)
 
 export type PlaySound = (sound: Sound) => Promise<void>
 
@@ -19,11 +28,16 @@ export function playSoundFactory({
     const log = logger.withTag('playSound')
 
     return async function playSound(sound: Sound): Promise<void> {
-        const file = join(config.sound.directory, sound)
-        const params = [file, '--volume', config.sound.volume.toString()]
+        const file = join(SOUND_DIR, sound)
+        const params = [file, '--volume', config.volume.toString()]
         log.trace(
             `Executing command '${config.binary.afplay} ${params.join(' ')}'`,
         )
-        await execa(config.binary.afplay, params)
+
+        try {
+            await execa(config.binary.afplay, params)
+        } catch (error) {
+            logger.error(`Failed to play sound: ${(error as Error).message}`)
+        }
     }
 }

@@ -1,11 +1,9 @@
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import config from 'config'
 import { createConsola, LogLevels } from 'consola'
 
 import { Application } from './application.js'
-import { configSchema } from './config.schema.js'
 import { Extractor } from './extractor.js'
 import { type IExtractor } from './extractor.interface.js'
 import { GameState } from './game-state.js'
@@ -17,7 +15,66 @@ import { getFloatingGemPath } from './util/get-floating-gem-path.js'
 import { asApplicationPosition } from './util/position.js'
 import { sleep } from './util/sleep.js'
 
-const cfg = configSchema.parse(config.util.toObject())
+import { sep as SEPARATOR } from 'node:path'
+
+import { z } from 'zod'
+
+const pathSchema = z.string().startsWith(SEPARATOR)
+
+const configSchema = z
+    .object({
+        logLevel: z.union([
+            z.literal('silent'),
+            z.literal('fatal'),
+            z.literal('error'),
+            z.literal('warn'),
+            z.literal('log'),
+            z.literal('info'),
+            z.literal('success'),
+            z.literal('fail'),
+            z.literal('ready'),
+            z.literal('start'),
+            z.literal('box'),
+            z.literal('debug'),
+            z.literal('trace'),
+            z.literal('verbose'),
+        ]),
+        delayInSeconds: z.number().int().positive(),
+        theTowerApplication: z
+            .object({
+                titleBarHeight: z.number().int().min(1),
+                name: z.string().min(1),
+                title: z.string().min(1),
+            })
+            .strict(),
+        binaries: z
+            .object({
+                afplay: pathSchema,
+                cliclick: pathSchema,
+                osascript: pathSchema,
+                pngpaste: pathSchema,
+                screencapture: pathSchema,
+            })
+            .strict(),
+    })
+    .strict()
+
+const cfg = configSchema.parse({
+    logLevel: 'debug',
+    delayInSeconds: 180,
+    theTowerApplication: {
+        titleBarHeight: 33,
+        name: 'TheTower',
+        title: 'The Tower',
+    },
+    binaries: {
+        afplay: '/usr/bin/afplay',
+        cliclick: '/opt/homebrew/bin/cliclick',
+        osascript: '/usr/bin/osascript',
+        pngpaste: '/opt/homebrew/bin/pngpaste',
+        screencapture: '/usr/sbin/screencapture',
+    },
+})
 const ROOT_DIR = join(dirname(fileURLToPath(import.meta.url)), '..')
 const logger = createConsola({ level: LogLevels[cfg.logLevel] })
 

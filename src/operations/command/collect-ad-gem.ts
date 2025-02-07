@@ -56,7 +56,7 @@ export function collectAdGemFactory({
         logger.success('Ad gem detected')
         const position = centerOf(region)
         await click(position)
-        await playSound(Sound.GEM_COLLECTED)
+        void playSound(Sound.GEM_COLLECTED)
 
         return takeScreenshot()
     }

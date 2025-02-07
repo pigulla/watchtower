@@ -1,7 +1,8 @@
 import { type ConsolaInstance } from 'consola'
 
+import { Config } from '../config'
+
 import { getWindowPositionFactory } from './get-window-position'
-import { type Config } from './config'
 import { type TakeScreenshot, takeScreenshotFactory } from './take-screenshot'
 import { type Click, clickFactory } from './click'
 import { type MoveCursorTo, moveCursorToFactory } from './move-cursor-to'
@@ -54,10 +55,13 @@ export function factory({
         }),
         moveCursorTo,
         click,
-        playSound: playSoundFactory({
-            config,
-            logger: logger,
-        }),
+        playSound:
+            config.volume === null
+                ? async () => {}
+                : playSoundFactory({
+                      config,
+                      logger: logger,
+                  }),
         isApplicationActive: isApplicationActiveFactory({ config, logger }),
         getText,
         stop,

@@ -3,11 +3,8 @@ import { execa } from 'execa'
 
 import { Position } from '../util/position'
 
-import { Config } from './config'
+import { Config } from '../config'
 import { GetWindowPosition } from './get-window-position'
-
-// TODO: Move to config
-const RETINA_SCALE = 2
 
 export type MoveCursorTo = (position: Position) => Promise<void>
 
@@ -21,12 +18,13 @@ export function moveCursorToFactory({
     logger: ConsolaInstance
 }): MoveCursorTo {
     const log = logger.withTag('moveCursorTo')
+    const scale = config.application.isRetina ? 2 : 1
 
     return async function moveCursorTo({ x, y }: Position): Promise<void> {
         const offset = await getWindowPosition()
         const target = {
-            x: Math.floor(x / RETINA_SCALE + offset.x),
-            y: Math.floor(y / RETINA_SCALE + offset.y),
+            x: Math.floor(x / scale + offset.x),
+            y: Math.floor(y / scale + offset.y),
         }
 
         const params = [`m:${target.x},${target.y}`]

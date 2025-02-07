@@ -3,11 +3,11 @@ import { execa } from 'execa'
 import sharp, { Sharp } from 'sharp'
 
 import { Position } from '../util/position'
+import { LETTERS, OCRMode } from '../ocr.interface'
 
 import { GetWindowPosition } from './get-window-position'
-import { Config } from './config'
+import { Config } from '../config'
 import { GetText } from './get-text'
-import { LETTERS, OCRMode } from '../ocr.interface'
 
 export type TakeScreenshot = () => Promise<Sharp>
 
