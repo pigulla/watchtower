@@ -27,7 +27,7 @@ export type Externals = {
     takeScreenshot: TakeScreenshot
 }
 
-export function factory({
+export function externalsFactory({
     config,
     logger,
 }: {
@@ -55,13 +55,10 @@ export function factory({
         }),
         moveCursorTo,
         click,
-        playSound:
-            config.volume === null
-                ? async () => {}
-                : playSoundFactory({
-                      config,
-                      logger: logger,
-                  }),
+        playSound: playSoundFactory({
+            config,
+            logger: logger,
+        }),
         isApplicationActive: isApplicationActiveFactory({ config, logger }),
         getText,
         stop,

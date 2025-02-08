@@ -12,9 +12,16 @@ const SOUND_DIR = join(
     dirname(fileURLToPath(import.meta.url)),
     '..',
     '..',
-    '..',
     'sounds',
 )
+
+const soundFiles: Readonly<Record<Sound, string>> = {
+    [Sound.AD_GEM_DETECTED]: 'ad-gem-detected.mp3',
+    [Sound.GAME_OVER]: 'game-over.mp3',
+    [Sound.GEM_COLLECTED]: 'gem-collected.wav',
+    [Sound.PERK_AVAILABLE]: 'perk-available.mp3',
+    [Sound.START]: 'start.mp3',
+}
 
 export type PlaySound = (sound: Sound) => Promise<void>
 
@@ -26,10 +33,15 @@ export function playSoundFactory({
     logger: ConsolaInstance
 }): PlaySound {
     const log = logger.withTag('playSound')
+    const { volume } = config
+
+    if (volume === null) {
+        return async (_sound: Sound) => {}
+    }
 
     return async function playSound(sound: Sound): Promise<void> {
-        const file = join(SOUND_DIR, sound)
-        const params = [file, '--volume', config.volume.toString()]
+        const file = join(SOUND_DIR, soundFiles[sound])
+        const params = [file, '--volume', volume.toString()]
         log.trace(
             `Executing command '${config.binary.afplay} ${params.join(' ')}'`,
         )

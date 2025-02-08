@@ -6,12 +6,13 @@ import { interval } from '../option/interval.option'
 import { GlobalOptions } from '../global-options'
 import { getConfig } from '../../config'
 import { watch } from '../../watch'
-import { factory } from '../../external/factory'
+import { externalsFactory } from '../../external/factory'
 import { factory as operationsFactory } from '../../operations/factory'
 
 export const watchCommand = new Command<[], {}, GlobalOptions>('watch')
     .addOption(notifyOn)
     .addOption(interval)
+    .option('-r, --repeat', 'Repeat alerts each iteration.')
     .description('Watch the game and notify on important events.')
     .action(async function (): Promise<void> {
         const options = this.optsWithGlobals()
@@ -24,11 +25,18 @@ export const watchCommand = new Command<[], {}, GlobalOptions>('watch')
             level: config.logLevel,
         })
 
-        const externals = factory({ config, logger })
+        const externals = externalsFactory({ config, logger })
         const { queries, commands } = operationsFactory({
             logger,
             ...externals,
         })
 
-        await watch({ externals, queries, commands, config, logger })
+        await watch({
+            externals,
+            queries,
+            commands,
+            config,
+            options: { repeatAlerts: Boolean(options.repeat) },
+            logger,
+        })
     })

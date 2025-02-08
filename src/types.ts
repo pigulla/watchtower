@@ -13,11 +13,11 @@ export enum AttackUpgrade {
 }
 
 export enum Sound {
-    GAME_OVER = 'game-over.wav',
-    GEM_COLLECTED = 'gem-collected.wav',
-    START = 'start.mp3',
-    PERK_AVAILABLE = 'perk-available.mp3',
-    AD_GEM_AVAILABLE = 'perk-available.mp3',
+    GAME_OVER = 'game over',
+    GEM_COLLECTED = 'gem collected',
+    START = 'start',
+    PERK_AVAILABLE = 'perk available',
+    AD_GEM_DETECTED = 'ad gem available',
 }
 
 export enum Event {

@@ -1,6 +1,3 @@
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
-
 import { createConsola, LogLevels } from 'consola'
 
 import { Application } from './application.js'
@@ -8,7 +5,7 @@ import { Extractor } from './extractor.js'
 import { type IExtractor } from './extractor.interface.js'
 import { GameState } from './game-state.js'
 import { OCR } from './ocr.js'
-import { Tab, BuyMultiplier, DefenseUpgrade, Sound } from './types.js'
+import { Tab, BuyMultiplier, DefenseUpgrade } from './types.js'
 import { uiConfig } from './ui-config.js'
 import { centerOf } from './util/center-of.js'
 import { getFloatingGemPath } from './util/get-floating-gem-path.js'
@@ -75,7 +72,6 @@ const cfg = configSchema.parse({
         screencapture: '/usr/sbin/screencapture',
     },
 })
-const ROOT_DIR = join(dirname(fileURLToPath(import.meta.url)), '..')
 const logger = createConsola({ level: LogLevels[cfg.logLevel] })
 
 const ocr = await new OCR({ logger }).start()
@@ -85,11 +81,9 @@ const application = new Application({
     logger,
     binaries: cfg.binaries,
     theTowerApplication: cfg.theTowerApplication,
-    soundDirectory: join(ROOT_DIR, 'sounds'),
 })
 
 logger.start('WatchTower started')
-await application.playSound(Sound.START, 1)
 await application.activateApplication()
 
 let screenshot = await application.getScreenshot()
@@ -109,7 +103,6 @@ gameState.on('gameOver', async () => {
     logger.info('Game is over, terminating')
 
     await ocr.stop()
-    await application.playSound(Sound.GAME_OVER, 1)
 
     process.exit()
 })
@@ -119,17 +112,9 @@ gameState.on('gemCount', gems => {
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-gameState.on('newPerkAvailable', async () => {
-    logger.info('New perk available')
-
-    await application.playSound(Sound.PERK_AVAILABLE, 1)
-})
-
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 gameState.on('adGemAvailable', async region => {
     logger.success('Ad gem detected')
 
-    await application.playSound(Sound.GEM_COLLECTED, 1)
     const position = centerOf(region)
     await application.clickAt(asApplicationPosition(position))
 

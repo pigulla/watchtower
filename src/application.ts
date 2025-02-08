@@ -1,12 +1,8 @@
-import assert from 'node:assert/strict'
-import { join } from 'node:path'
-
 import { type ConsolaInstance } from 'consola'
 import { execa } from 'execa'
 import sharp, { type Sharp } from 'sharp'
 
 import { type IApplication } from './application.interface'
-import type { Sound } from './types'
 import {
     type ApplicationPosition,
     asScreenPosition,
@@ -31,23 +27,19 @@ type TheTowerApplication = {
 export class Application implements IApplication {
     private readonly theTowerApplication: TheTowerApplication
     private readonly binaries: Binaries
-    private readonly soundDirectory: string
     private readonly logger: ConsolaInstance
 
     public constructor({
         binaries,
         theTowerApplication,
-        soundDirectory,
         logger,
     }: {
         binaries: Binaries
         theTowerApplication: TheTowerApplication
-        soundDirectory: string
         logger: ConsolaInstance
     }) {
         this.binaries = { ...binaries }
         this.theTowerApplication = { ...theTowerApplication }
-        this.soundDirectory = soundDirectory
         this.logger = logger.withTag(Application.name)
     }
 
@@ -152,15 +144,5 @@ export class Application implements IApplication {
         })
 
         return sharp(buffer)
-    }
-
-    public async playSound(sound: Sound, volume: number): Promise<void> {
-        assert(volume >= 0 && volume <= 1)
-
-        await this.run(this.binaries.afplay, [
-            join(this.soundDirectory, sound),
-            `--volume`,
-            volume.toString(),
-        ])
     }
 }
