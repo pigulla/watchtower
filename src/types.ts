@@ -15,6 +15,7 @@ export enum AttackUpgrade {
 export enum Sound {
     GAME_OVER = 'game over',
     GEM_COLLECTED = 'gem collected',
+    ERROR = 'error',
     START = 'start',
     PERK_AVAILABLE = 'perk available',
     AD_GEM_DETECTED = 'ad gem available',

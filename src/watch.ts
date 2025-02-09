@@ -77,6 +77,7 @@ export async function watch({
     } catch (error) {
         logger.fatal((error as Error).message)
         console.error(error)
+        await playSound(Sound.ERROR)
         process.exitCode = 1
     }
 

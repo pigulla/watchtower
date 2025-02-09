@@ -17,6 +17,7 @@ const SOUND_DIR = join(
 
 const soundFiles: Readonly<Record<Sound, string>> = {
     [Sound.AD_GEM_DETECTED]: 'ad-gem-detected.mp3',
+    [Sound.ERROR]: 'error.mp3',
     [Sound.GAME_OVER]: 'game-over.mp3',
     [Sound.GEM_COLLECTED]: 'gem-collected.wav',
     [Sound.PERK_AVAILABLE]: 'perk-available.mp3',
