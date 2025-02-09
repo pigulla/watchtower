@@ -5,7 +5,7 @@ import { Externals } from './external/factory'
 import type { Commands } from './operations/command/commands'
 import type { Queries } from './operations/query/queries'
 import { sleep } from './util/sleep'
-import { Sound } from './types'
+import { Event, Sound } from './types'
 import { Config } from './config'
 
 type State = {
@@ -18,14 +18,14 @@ export async function watch({
     externals: { takeScreenshot, stop, playSound },
     queries: { isNewPerkAvailable, getAdGemPosition, getGems, isGameOver },
     config: { interval },
-    options: { repeatAlerts },
+    options: { repeatAlerts, notifyOn },
     logger,
 }: {
     externals: Externals
     commands: Commands
     queries: Queries
     config: Config
-    options: { repeatAlerts: boolean }
+    options: { repeatAlerts: boolean; notifyOn: ReadonlySet<Event> }
     logger: ConsolaInstance
 }): Promise<void> {
     const state: State = {
@@ -47,11 +47,19 @@ export async function watch({
                 getGems(screenshot),
             ])
 
-            if (!state.adGemAvailable && adGemPosition !== null) {
+            if (
+                notifyOn.has(Event.AD_GEM_AVAILABLE) &&
+                !state.adGemAvailable &&
+                adGemPosition !== null
+            ) {
                 logger.info(`New ad gem available`)
                 void playSound(Sound.AD_GEM_DETECTED)
             }
-            if (!state.newPerkAvailable && newPerkAvailable) {
+            if (
+                notifyOn.has(Event.NEW_PERK_AVAILABLE) &&
+                !state.newPerkAvailable &&
+                newPerkAvailable
+            ) {
                 logger.info(`New perk available`)
                 void playSound(Sound.PERK_AVAILABLE)
             }

@@ -21,7 +21,7 @@ export enum Sound {
 }
 
 export enum Event {
-    PERK_AVAILABLE = 'perk-available',
+    NEW_PERK_AVAILABLE = 'perk-available',
     AD_GEM_AVAILABLE = 'ad-gem-available',
 }
 

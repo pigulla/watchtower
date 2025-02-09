@@ -10,14 +10,14 @@ import { centerOf } from '../../util/center-of'
 
 import type { Command } from './command'
 
-export enum PurchaseStrategy {
+export enum Strategy {
     SEQUENTIAL = 'sequential',
     ROUND_ROBIN = 'round robin',
     CHEAPEST_FIRST = 'cheapest first',
     RANDOM = 'random',
 }
 
-export type PurchaseUpgrades = Command<[PurchaseStrategy, readonly Upgrade[]]>
+export type PurchaseUpgrades = Command<[Strategy, readonly Upgrade[]]>
 
 export function purchaseUpgradesFactory(
     { getText, takeScreenshot, click, logger }: Injections,
@@ -61,11 +61,11 @@ export function purchaseUpgradesFactory(
 
     return async function purchaseUpgrades(
         screenshot: Sharp,
-        strategy: PurchaseStrategy,
+        strategy: Strategy,
         upgrades: readonly Upgrade[],
     ): Promise<Sharp> {
         // TODO: Implement other strategies
-        if (strategy !== PurchaseStrategy.SEQUENTIAL) {
+        if (strategy !== Strategy.SEQUENTIAL) {
             throw new Error(`Strategy '${strategy}' not yet supported`)
         }
 

@@ -15,6 +15,7 @@ import { isNewPertAvailableFactory } from './query/is-new-perk-available'
 import { purchaseUpgradesFactory } from './command/purchase-upgrades'
 import { getAdGemPositionFactory } from './query/get-ad-gem-position'
 import { getUpgradeCostFactory } from './query/get-upgrade-cost'
+import { moveCursorToIdlePositionFactory } from './command/move-cursor-to-idle-position'
 
 export function queryFactory(injections: Injections): Queries {
     return {
@@ -40,6 +41,10 @@ export function factory(injections: Injections): {
     const commands = {
         collectFloatingGem: collectFloatingGemFactory(injections, queries),
         collectAdGem: collectAdGemFactory(injections),
+        moveToIdlePosition: moveCursorToIdlePositionFactory(
+            injections,
+            queries,
+        ),
         purchaseUpgrades: purchaseUpgradesFactory(injections, {
             ensureTabIsOpen,
         }),

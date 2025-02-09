@@ -30,7 +30,7 @@ export function clickFactory({
                 y: Math.floor(position.y / scale + offset.y),
             }
 
-            params = [`c:${target.x},${target.y}`]
+            params = [`m:${target.x},${target.y}`, ...params]
         }
 
         log.trace(
