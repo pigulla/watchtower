@@ -37,9 +37,15 @@ export async function watch({
     try {
         let screenshot: Sharp
 
-        do {
+        while (true) {
             logger.debug('Running in watch mode')
             screenshot = await takeScreenshot()
+
+            if (await isGameOver(screenshot)) {
+                logger.success('Game is over')
+                await playSound(Sound.GAME_OVER)
+                break
+            }
 
             const [adGemPosition, newPerkAvailable, gems] = await Promise.all([
                 getAdGemPosition(screenshot),
@@ -73,7 +79,7 @@ export async function watch({
 
             logger.trace(`Waiting for ${interval.asSeconds()} second(s)`)
             await sleep(interval.asMilliseconds())
-        } while (!(await isGameOver(screenshot)))
+        }
     } catch (error) {
         logger.fatal((error as Error).message)
         console.error(error)
