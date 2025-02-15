@@ -25,6 +25,7 @@
     "test": "npm run lint && node --test --import tsx --no-deprecation test/**/*.test.ts && npm run audit"
   },
   "dependencies": {
+    "array-shuffle": "3.0.0",
     "commander": "13.1.0",
     "config": "3.3.12",
     "consola": "3.4.0",
@@ -34,7 +35,7 @@
     "read-pkg": "9.0.1",
     "sharp": "0.33.5",
     "tesseract.js": "6.0.0",
-    "zod": "3.24.1"
+    "zod": "3.24.2"
   },
   "devDependencies": {
     "@commander-js/extra-typings": "13.1.0",
@@ -42,18 +43,18 @@
     "@swc-node/register": "1.10.9",
     "@types/config": "3.3.5",
     "@types/ndarray": "1.0.14",
-    "@types/node": "22.13.1",
+    "@types/node": "22.13.4",
     "depcheck": "1.4.7",
-    "eslint": "9.20.0",
+    "eslint": "9.20.1",
     "eslint-plugin-unicorn": "56.0.1",
-    "globals": "15.14.0",
+    "globals": "15.15.0",
     "lockfile-lint": "4.14.0",
-    "prettier": "3.4.2",
+    "prettier": "3.5.1",
     "sort-package-json": "2.14.0",
     "tsx": "4.19.2",
-    "type-fest": "4.33.0",
+    "type-fest": "4.34.1",
     "typescript": "5.7.3",
-    "typescript-eslint": "8.23.0"
+    "typescript-eslint": "8.24.0"
   },
   "engines": {
     "node": ">=22"

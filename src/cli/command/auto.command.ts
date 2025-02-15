@@ -29,20 +29,24 @@ export const autoCommand = new Command<[], {}, GlobalOptions>('auto')
         })
 
         const externals = externalsFactory({ config, logger })
-        const { queries, commands } = operationsFactory({
-            logger,
-            ...externals,
-        })
+        const { queries, commands } = operationsFactory(
+            {
+                logger,
+                ...externals,
+            },
+            {
+                purchase: {
+                    strategy: options.strategy,
+                    upgrades: options.purchase,
+                },
+            },
+        )
 
         await auto({
             externals,
             queries,
             commands,
             config,
-            options: {
-                upgrades: options.purchase,
-                strategy: options.strategy,
-            },
             logger,
         })
     })

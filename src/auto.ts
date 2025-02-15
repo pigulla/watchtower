@@ -4,10 +4,9 @@ import { Sharp } from 'sharp'
 import { Externals } from './external/factory'
 import type { Commands } from './operations/command/commands'
 import type { Queries } from './operations/query/queries'
-import { Strategy } from './operations/command/purchase-upgrades'
 import { sleep } from './util/sleep'
 import { Config } from './config'
-import { Sound, Upgrade } from './types'
+import { Sound } from './types'
 
 type State = {
     gems: number | null
@@ -23,14 +22,12 @@ export async function auto({
         moveToIdlePosition,
     },
     config: { interval },
-    options: { upgrades, strategy },
     logger,
 }: {
     externals: Externals
     commands: Commands
     queries: Queries
     config: Config
-    options: { upgrades: Upgrade[]; strategy: Strategy }
     logger: ConsolaInstance
 }): Promise<void> {
     const state: State = {
@@ -55,9 +52,7 @@ export async function auto({
                 .then(takeScreenshot)
                 .then(collectAdGem)
                 .then(collectFloatingGem)
-                .then(screenshot =>
-                    purchaseUpgrades(screenshot, strategy, upgrades),
-                )
+                .then(purchaseUpgrades)
                 .then(moveToIdlePosition)
 
             const gems = await getGems(screenshot)

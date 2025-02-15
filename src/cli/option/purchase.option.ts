@@ -1,6 +1,6 @@
 import { Option, InvalidOptionArgumentError } from '@commander-js/extra-typings'
 
-import { Upgrade, DefenseUpgrade } from '../../types'
+import { DefenseUpgrade } from '../../types'
 
 enum UpgradeKey {
     HEALTH = 'H',
@@ -14,8 +14,8 @@ export const purchase = new Option(
     'purchase specified upgrades',
 )
     .choices(Object.values(UpgradeKey))
-    .default<Upgrade[]>([] as Upgrade[], '<none>')
-    .argParser<Upgrade[]>((value, previous) => {
+    .default<DefenseUpgrade[]>([] as DefenseUpgrade[], '<none>')
+    .argParser<DefenseUpgrade[]>((value, previous) => {
         switch (value as UpgradeKey) {
             case UpgradeKey.HEALTH:
                 return [...previous, DefenseUpgrade.HEALTH]

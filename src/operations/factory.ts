@@ -12,10 +12,11 @@ import { getGemsFactory } from './query/get-gems'
 import { getOpenTabFactory } from './query/get-open-tab'
 import { isGameOverFactory } from './query/is-game-over'
 import { isNewPertAvailableFactory } from './query/is-new-perk-available'
-import { purchaseUpgradesFactory } from './command/purchase-upgrades'
+import { purchaseUpgradesFactory, Strategy } from './command/purchase-upgrades'
 import { getAdGemPositionFactory } from './query/get-ad-gem-position'
 import { getUpgradeCostFactory } from './query/get-upgrade-cost'
 import { moveCursorToIdlePositionFactory } from './command/move-cursor-to-idle-position'
+import { DefenseUpgrade } from '../types'
 
 export function queryFactory(injections: Injections): Queries {
     return {
@@ -31,7 +32,12 @@ export function queryFactory(injections: Injections): Queries {
     }
 }
 
-export function factory(injections: Injections): {
+export function factory(
+    injections: Injections,
+    options: {
+        purchase: { strategy: Strategy; upgrades: readonly DefenseUpgrade[] }
+    },
+): {
     commands: Commands
     queries: Queries
 } {
@@ -45,9 +51,13 @@ export function factory(injections: Injections): {
             injections,
             queries,
         ),
-        purchaseUpgrades: purchaseUpgradesFactory(injections, {
-            ensureTabIsOpen,
-        }),
+        purchaseUpgrades: purchaseUpgradesFactory(
+            injections,
+            {
+                ensureTabIsOpen,
+            },
+            options,
+        ),
         ensureTabIsOpen,
     }
 

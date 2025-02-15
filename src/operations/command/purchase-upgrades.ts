@@ -1,7 +1,8 @@
 import type { Sharp } from 'sharp'
+import shuffle from 'array-shuffle'
 
 import type { Injections } from '../injections'
-import { tabOf, Upgrade } from '../../types'
+import { DefenseUpgrade, Tab, Upgrade } from '../../types'
 import { uiConfig } from '../../ui-config'
 import { OCRMode } from '../../ocr.interface'
 import { parseNumber } from '../../util/parse-number'
@@ -9,6 +10,7 @@ import type { EnsureTabIsOpen } from './ensure-tab-is-open'
 import { centerOf } from '../../util/center-of'
 
 import type { Command } from './command'
+import { compareBigint } from '../../util/compare-bigint'
 
 export enum Strategy {
     SEQUENTIAL = 'sequential',
@@ -17,14 +19,96 @@ export enum Strategy {
     RANDOM = 'random',
 }
 
-export type PurchaseUpgrades = Command<[Strategy, readonly Upgrade[]]>
+export type PurchaseUpgrades = Command
+
+const MAXED = Symbol('max')
+const UNPARSABLE = Symbol('unparsable')
+
+type UpgradeSelector = (screenshot: Sharp) => Promise<DefenseUpgrade | null>
+
+// TODO: Refactor to use a nice generator function instead
+// TODO: Add cross-tab purchase support
+function getUpgradeSelector({
+    strategy,
+    upgrades,
+    getUpgradeCost,
+}: {
+    strategy: Strategy
+    upgrades: readonly DefenseUpgrade[]
+    getUpgradeCost: (
+        screenshot: Sharp,
+        upgrade: DefenseUpgrade,
+    ) => Promise<bigint | typeof MAXED | typeof UNPARSABLE>
+}): UpgradeSelector {
+    switch (strategy) {
+        case Strategy.RANDOM: {
+            return async function random(screenshot: Sharp) {
+                for (const upgrade of shuffle(upgrades)) {
+                    const cost = await getUpgradeCost(screenshot, upgrade)
+                    if (typeof cost === 'bigint') {
+                        return upgrade
+                    }
+                }
+                return null
+            }
+        }
+        case Strategy.CHEAPEST_FIRST: {
+            return async function cheapestFirst(screenshot: Sharp) {
+                const costs = await Promise.all(
+                    upgrades.map(async upgrade => ({
+                        upgrade,
+                        cost: await getUpgradeCost(screenshot, upgrade),
+                    })),
+                )
+                const cheapest = costs
+                    .filter(
+                        (
+                            item,
+                        ): item is { upgrade: DefenseUpgrade; cost: bigint } =>
+                            typeof item.cost === 'bigint',
+                    )
+                    .sort((a, b) => compareBigint(a.cost, b.cost))[0]
+
+                return cheapest ? cheapest.upgrade : null
+            }
+        }
+        case Strategy.ROUND_ROBIN: {
+            // const i = 0
+            // eslint-disable-next-line @typescript-eslint/require-await
+            return async function roundRobin(_screenshot: Sharp) {
+                // const result = upgrades[i]
+                // i = (i + 1) % upgrades.length
+
+                // TODO: Implement strategy
+                return null
+            }
+        }
+        case Strategy.SEQUENTIAL: {
+            return async function (screenshot: Sharp) {
+                for (const upgrade of upgrades) {
+                    const cost = await getUpgradeCost(screenshot, upgrade)
+                    if (typeof cost === 'bigint') {
+                        return upgrade
+                    }
+                }
+                return null
+            }
+        }
+    }
+}
 
 export function purchaseUpgradesFactory(
     { getText, takeScreenshot, click, logger }: Injections,
     { ensureTabIsOpen }: { ensureTabIsOpen: EnsureTabIsOpen },
+    {
+        purchase: { strategy, upgrades },
+    }: {
+        purchase: { strategy: Strategy; upgrades: readonly DefenseUpgrade[] }
+    },
 ): PurchaseUpgrades {
-    const MAXED = Symbol('max')
-    const UNPARSABLE = Symbol('unparsable')
+    if (upgrades.length === 0) {
+        return (screenshot: Sharp) => Promise.resolve(screenshot)
+    }
 
     async function getUpgradeCost(
         screenshot: Sharp,
@@ -59,36 +143,26 @@ export function purchaseUpgradesFactory(
         return matches ? (parseNumber(matches[1]!) ?? UNPARSABLE) : UNPARSABLE
     }
 
-    return async function purchaseUpgrades(
-        screenshot: Sharp,
-        strategy: Strategy,
-        upgrades: readonly Upgrade[],
-    ): Promise<Sharp> {
-        // TODO: Implement other strategies
-        if (strategy !== Strategy.SEQUENTIAL) {
-            throw new Error(`Strategy '${strategy}' not yet supported`)
-        }
+    const selector = getUpgradeSelector({
+        strategy,
+        upgrades,
+        getUpgradeCost,
+    })
 
+    return async function purchaseUpgrades(screenshot: Sharp): Promise<Sharp> {
         // TODO: Check if the upgrade can actually be purchased (i.e., there's enough cash available)
+        screenshot = await ensureTabIsOpen(screenshot, Tab.DEFENSE_UPGRADES)
+        const upgrade = await selector(screenshot)
 
-        for (const upgrade of upgrades) {
-            screenshot = await ensureTabIsOpen(screenshot, tabOf(upgrade))
-
-            const cost = await getUpgradeCost(screenshot, upgrade)
-
-            if (cost === MAXED) {
-                logger.debug(`Upgrade '${upgrade}' is maxed`)
-            } else if (cost === UNPARSABLE) {
-                logger.info(`Failed to parse cost for upgrade '${upgrade}`)
-            } else {
-                logger.info(`Purchasing upgrade '${upgrade}'`)
-                const position = centerOf(uiConfig.tabs.upgrades[upgrade].cost)
-                await click(position)
-                screenshot = await takeScreenshot()
-                break
-            }
+        if (upgrade === null) {
+            logger.verbose(`No upgrade to purchase found`)
+            return screenshot
         }
 
-        return screenshot
+        logger.info(`Purchasing upgrade '${upgrade}'`)
+        const position = centerOf(uiConfig.tabs.upgrades[upgrade].cost)
+        await click(position)
+
+        return takeScreenshot()
     }
 }
