@@ -14,5 +14,7 @@
     "osascript": "/usr/bin/osascript",
     "pngpaste": "/opt/homebrew/bin/pngpaste",
     "screencapture": "/usr/sbin/screencapture"
+  },
+  "email": {
   }
 }

@@ -7,13 +7,20 @@ import type { Queries } from './operations/query/queries'
 import { sleep } from './util/sleep'
 import { Config } from './config'
 import { Sound } from './types'
+import dayjs from 'dayjs'
 
 type State = {
     gems: number | null
 }
 
 export async function auto({
-    externals: { activateApplication, takeScreenshot, stop, playSound },
+    externals: {
+        activateApplication,
+        takeScreenshot,
+        stop,
+        playSound,
+        sendMail,
+    },
     queries: { getGems, isGameOver },
     commands: {
         collectAdGem,
@@ -21,7 +28,7 @@ export async function auto({
         purchaseUpgrades,
         moveToIdlePosition,
     },
-    config: { interval },
+    config: { interval, mailOnGameOver },
     logger,
 }: {
     externals: Externals
@@ -45,6 +52,13 @@ export async function auto({
             if (await isGameOver(screenshot)) {
                 logger.success('Game is over')
                 await playSound(Sound.GAME_OVER)
+
+                if (mailOnGameOver) {
+                    await sendMail({
+                        subject: 'Game is over',
+                        text: `The game terminated on ${dayjs().format()}`,
+                    })
+                }
                 break
             }
 
