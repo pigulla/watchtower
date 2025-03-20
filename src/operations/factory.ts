@@ -44,6 +44,7 @@ export function factory(
     const queries = queryFactory(injections)
 
     const ensureTabIsOpen = ensureTabIsOpenFactory(injections, queries)
+    const getCash = getCashFactory(injections)
     const commands = {
         collectFloatingGem: collectFloatingGemFactory(injections, queries),
         collectAdGem: collectAdGemFactory(injections),
@@ -55,6 +56,7 @@ export function factory(
             injections,
             {
                 ensureTabIsOpen,
+                getCash,
             },
             options,
         ),

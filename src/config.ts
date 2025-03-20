@@ -47,6 +47,12 @@ const jsonConfigSchema = z
                     .strict(),
             })
             .strict(),
+        server: z
+            .object({
+                interface: z.string().min(1),
+                port: z.number().int().min(0),
+            })
+            .strict(),
     })
     .strict()
 

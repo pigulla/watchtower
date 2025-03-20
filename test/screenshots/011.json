@@ -1,0 +1,21 @@
+{
+  "openTab": "Defense Upgrades",
+  "isMenuOpen": true,
+  "wave": 2290,
+  "isGameOver": false,
+  "cash": "1990000000",
+  "gems": 793,
+  "coins": "434080000000",
+  "isAdGemAvailable": true,
+  "isNewPerkAvailable": false,
+  "buyMultiplier": "x100",
+  "upgradeCost": {
+    "attack": null,
+    "defense": {
+      "Health": "Max",
+      "Defense %": "Max",
+      "Health Regen": "Max",
+      "Defense Absolute": "Max"
+    }
+  }
+}

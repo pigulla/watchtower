@@ -88,6 +88,30 @@ export const uiConfig = {
                 width: 250,
                 height: 140,
             },
+            {
+                left: 230,
+                top: 1504,
+                width: 250,
+                height: 140,
+            },
+            {
+                left: 230,
+                top: 760,
+                width: 250,
+                height: 140,
+            },
+            {
+                left: 230,
+                top: 887,
+                width: 250,
+                height: 140,
+            },
+            {
+                left: 230,
+                top: 1631,
+                width: 250,
+                height: 140,
+            },
         ],
     },
     tabs: {

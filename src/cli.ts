@@ -7,6 +7,7 @@ import { verbose } from './cli/option/verbose.option'
 import { volume } from './cli/option/volume.option'
 import { watchCommand } from './cli/command/watch.command'
 import { autoCommand } from './cli/command/auto.command'
+import { screenshotCommand } from './cli/command/screenshot.command'
 
 const { name, version, description } = await readPackage()
 
@@ -21,5 +22,6 @@ const program = new Command()
 
 program.addCommand(watchCommand)
 program.addCommand(autoCommand)
+program.addCommand(screenshotCommand)
 
 program.parse(process.argv)

@@ -23,6 +23,7 @@ export const watchCommand = new Command<[], {}, GlobalOptions>('watch')
             logLevel: options.verbose,
             volume: options.silent ? null : options.volume,
             interval: options.interval,
+            mailOnGameOver: options.mailOnGameOver,
         })
         const logger = createConsola({
             level: config.logLevel,

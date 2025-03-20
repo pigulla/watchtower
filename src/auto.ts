@@ -1,5 +1,6 @@
 import { ConsolaInstance } from 'consola'
 import { Sharp } from 'sharp'
+import { App } from '@tinyhttp/app'
 
 import { Externals } from './external/factory'
 import type { Commands } from './operations/command/commands'
@@ -28,7 +29,7 @@ export async function auto({
         purchaseUpgrades,
         moveToIdlePosition,
     },
-    config: { interval, mailOnGameOver },
+    config: { interval, mailOnGameOver, server },
     logger,
 }: {
     externals: Externals
@@ -40,6 +41,18 @@ export async function auto({
     const state: State = {
         gems: null,
     }
+
+    const app = new App()
+        .get('/', (_request, response) => {
+            response.send(state)
+        })
+        .listen(
+            server.port,
+            () => {
+                logger.info(`Server listening`)
+            },
+            server.interface,
+        )
 
     try {
         let screenshot: Sharp
@@ -86,5 +99,6 @@ export async function auto({
         process.exitCode = 1
     }
 
+    app.close()
     await stop()
 }

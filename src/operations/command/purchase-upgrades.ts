@@ -11,6 +11,7 @@ import { centerOf } from '../../util/center-of'
 
 import type { Command } from './command'
 import { compareBigint } from '../../util/compare-bigint'
+import { GetCash } from '../query/get-cash'
 
 export enum Strategy {
     SEQUENTIAL = 'sequential',
@@ -24,7 +25,9 @@ export type PurchaseUpgrades = Command
 const MAXED = Symbol('max')
 const UNPARSABLE = Symbol('unparsable')
 
-type UpgradeSelector = (screenshot: Sharp) => Promise<DefenseUpgrade | null>
+type UpgradeSelector = (
+    screenshot: Sharp,
+) => Promise<{ upgrade: DefenseUpgrade; cost: bigint } | null>
 
 // TODO: Refactor to use a nice generator function instead
 // TODO: Add cross-tab purchase support
@@ -46,7 +49,7 @@ function getUpgradeSelector({
                 for (const upgrade of shuffle(upgrades)) {
                     const cost = await getUpgradeCost(screenshot, upgrade)
                     if (typeof cost === 'bigint') {
-                        return upgrade
+                        return { upgrade, cost }
                     }
                 }
                 return null
@@ -69,7 +72,9 @@ function getUpgradeSelector({
                     )
                     .sort((a, b) => compareBigint(a.cost, b.cost))[0]
 
-                return cheapest ? cheapest.upgrade : null
+                return cheapest
+                    ? { upgrade: cheapest.upgrade, cost: cheapest.cost }
+                    : null
             }
         }
         case Strategy.ROUND_ROBIN: {
@@ -88,7 +93,7 @@ function getUpgradeSelector({
                 for (const upgrade of upgrades) {
                     const cost = await getUpgradeCost(screenshot, upgrade)
                     if (typeof cost === 'bigint') {
-                        return upgrade
+                        return { upgrade, cost }
                     }
                 }
                 return null
@@ -99,7 +104,10 @@ function getUpgradeSelector({
 
 export function purchaseUpgradesFactory(
     { getText, takeScreenshot, click, logger }: Injections,
-    { ensureTabIsOpen }: { ensureTabIsOpen: EnsureTabIsOpen },
+    {
+        ensureTabIsOpen,
+        getCash,
+    }: { ensureTabIsOpen: EnsureTabIsOpen; getCash: GetCash },
     {
         purchase: { strategy, upgrades },
     }: {
@@ -152,15 +160,20 @@ export function purchaseUpgradesFactory(
     return async function purchaseUpgrades(screenshot: Sharp): Promise<Sharp> {
         // TODO: Check if the upgrade can actually be purchased (i.e., there's enough cash available)
         screenshot = await ensureTabIsOpen(screenshot, Tab.DEFENSE_UPGRADES)
-        const upgrade = await selector(screenshot)
+        const cash = await getCash(screenshot)
+        const selected = await selector(screenshot)
 
-        if (upgrade === null) {
+        if (selected === null) {
             logger.verbose(`No upgrade to purchase found`)
             return screenshot
         }
+        if (cash !== null && selected.cost > cash) {
+            logger.verbose(`Insufficient cash to purchase upgrade`)
+            return screenshot
+        }
 
-        logger.info(`Purchasing upgrade '${upgrade}'`)
-        const position = centerOf(uiConfig.tabs.upgrades[upgrade].cost)
+        logger.info(`Purchasing upgrade '${selected.upgrade}'`)
+        const position = centerOf(uiConfig.tabs.upgrades[selected.upgrade].cost)
         await click(position)
 
         return takeScreenshot()

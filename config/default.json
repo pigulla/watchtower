@@ -15,6 +15,10 @@
     "pngpaste": "/opt/homebrew/bin/pngpaste",
     "screencapture": "/usr/sbin/screencapture"
   },
+  "server": {
+    "port": 7777,
+    "interface": "0.0.0.0"
+  },
   "email": {
   }
 }

@@ -25,6 +25,7 @@
     "test": "npm run lint && node --test --import tsx --no-deprecation test/**/*.test.ts && npm run audit"
   },
   "dependencies": {
+    "@tinyhttp/app": "2.5.0",
     "array-shuffle": "3.0.0",
     "commander": "13.1.0",
     "config": "3.3.12",

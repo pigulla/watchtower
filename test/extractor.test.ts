@@ -15,7 +15,7 @@ import { AttackUpgrade, DefenseUpgrade } from '../src/types'
 
 import { schema, type TestCase } from './schema'
 
-/* eslint-disable @typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
 export const SCREENSHOTS_DIR = join(
     dirname(fileURLToPath(import.meta.url)),
@@ -77,10 +77,7 @@ describe('Extractor', () => {
             })
 
             it('getGemCount', async () => {
-                assert.equal(
-                    await extractor.getGemCount(image),
-                    expected.gemCount,
-                )
+                assert.equal(await extractor.getGemCount(image), expected.gems)
             })
 
             it('getCash', async () => {
