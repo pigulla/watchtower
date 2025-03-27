@@ -37,6 +37,7 @@ export async function watch({
     try {
         let screenshot: Sharp
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         while (true) {
             logger.debug('Running in watch mode')
             screenshot = await takeScreenshot()

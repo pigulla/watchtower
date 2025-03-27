@@ -1,7 +1,7 @@
 import { Option, InvalidOptionArgumentError } from '@commander-js/extra-typings'
 import { FormatEnum } from 'sharp'
 
-enum ImageFormat {
+export enum ImageFormat {
     JPEG = 'jpeg',
     JPEG_2000 = 'jp2',
     PNG = 'png',

@@ -22,14 +22,14 @@
     "lint:tsc": "tsc --noEmit",
     "start": "node --import @swc-node/register/esm-register --no-deprecation src/main.ts",
     "start:dist": "node dist/main.js",
-    "test": "npm run lint && node --test --import tsx --no-deprecation test/**/*.test.ts && npm run audit"
+    "test": "npm run lint && npm run audit && node --test --import tsx --no-deprecation test/**/*.test.ts"
   },
   "dependencies": {
-    "@tinyhttp/app": "2.5.0",
+    "@tinyhttp/app": "2.5.2",
     "array-shuffle": "3.0.0",
     "commander": "13.1.0",
     "config": "3.3.12",
-    "consola": "3.4.0",
+    "consola": "3.4.2",
     "dayjs": "1.11.13",
     "execa": "9.5.2",
     "ndarray": "1.0.19",
@@ -41,23 +41,22 @@
   },
   "devDependencies": {
     "@commander-js/extra-typings": "13.1.0",
-    "@eslint/js": "9.20.0",
-    "@swc-node/register": "1.10.9",
+    "@eslint/js": "9.23.0",
+    "@swc-node/register": "1.10.10",
     "@types/config": "3.3.5",
     "@types/ndarray": "1.0.14",
-    "@types/node": "22.13.4",
+    "@types/node": "22.13.14",
     "@types/nodemailer": "6.4.17",
     "depcheck": "1.4.7",
-    "eslint": "9.20.1",
-    "eslint-plugin-unicorn": "56.0.1",
-    "globals": "15.15.0",
+    "eslint": "9.23.0",
+    "eslint-plugin-unicorn": "58.0.0",
+    "globals": "16.0.0",
     "lockfile-lint": "4.14.0",
-    "prettier": "3.5.1",
-    "sort-package-json": "2.14.0",
-    "tsx": "4.19.2",
-    "type-fest": "4.34.1",
-    "typescript": "5.7.3",
-    "typescript-eslint": "8.24.0"
+    "prettier": "3.5.3",
+    "sort-package-json": "3.0.0",
+    "tsx": "4.19.3",
+    "typescript": "5.8.2",
+    "typescript-eslint": "8.28.0"
   },
   "engines": {
     "node": ">=22"

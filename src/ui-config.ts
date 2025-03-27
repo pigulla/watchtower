@@ -54,7 +54,7 @@ export const uiConfig = {
         gemCounter: {
             left: 100,
             top: 270,
-            width: 120,
+            width: 130,
             height: 53,
         },
         perkProgress: {
