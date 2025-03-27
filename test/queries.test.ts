@@ -60,7 +60,7 @@ describe('Queries', () => {
     const getNumber = getNumberFactory({ getText, logger })
 
     const injectionMocks = {
-        clickAt: mock.fn(),
+        click: mock.fn(),
         getNumber,
         getText,
         moveCursorTo: mock.fn(),

@@ -1,0 +1,16 @@
+{
+  "openTab": null,
+  "isMenuOpen": false,
+  "wave": null,
+  "isGameOver": true,
+  "cash": null,
+  "gems": null,
+  "coins": null,
+  "isAdGemAvailable": false,
+  "isNewPerkAvailable": false,
+  "buyMultiplier": null,
+  "upgradeCost": {
+    "attack": null,
+    "defense": null
+  }
+}

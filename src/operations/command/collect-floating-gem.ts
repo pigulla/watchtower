@@ -19,7 +19,7 @@ export function getFloatingGemPath({
     isTabsOpen: boolean
 }): ApplicationPosition[] {
     const segments = 10
-    const radius = 210
+    const radius = 215
     const towerLocation =
         uiConfig.tower.position[`withTabs${isTabsOpen ? 'Open' : 'Closed'}`]
 

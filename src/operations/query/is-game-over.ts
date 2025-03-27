@@ -10,10 +10,16 @@ export type IsGameOver = Query<boolean>
 
 export function isGameOverFactory({ getText }: Injections): IsGameOver {
     return async function isGameOver(screenshot: Sharp): Promise<boolean> {
-        const text = await getText(screenshot, uiConfig.killedByText, {
-            mode: OCRMode.SINGLE_LINE,
-        })
+        for (const coordinates of uiConfig.killedByText) {
+            const text = await getText(screenshot, coordinates, {
+                mode: OCRMode.SINGLE_LINE,
+            })
 
-        return text.startsWith('Killed By')
+            if (text.startsWith('Killed By')) {
+                return true
+            }
+        }
+
+        return false
     }
 }

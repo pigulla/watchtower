@@ -24,12 +24,20 @@ export const uiConfig = {
             },
         },
     },
-    killedByText: {
-        left: 420,
-        top: 915,
-        width: 750,
-        height: 120,
-    },
+    killedByText: [
+        {
+            left: 420,
+            top: 915,
+            width: 750,
+            height: 120,
+        },
+        {
+            left: 420,
+            top: 960,
+            width: 750,
+            height: 120,
+        },
+    ],
     stats: {
         cash: {
             left: 68,
