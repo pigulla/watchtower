@@ -1,0 +1,16 @@
+{
+  "openTab": null,
+  "isMenuOpen": true,
+  "wave": 2291,
+  "isGameOver": false,
+  "cash": "1990000000",
+  "gems": 793,
+  "coins": "434080000000",
+  "isAdGemAvailable": true,
+  "isNewPerkAvailable": false,
+  "buyMultiplier": null,
+  "upgradeCost": {
+    "attack": null,
+    "defense": null
+  }
+}

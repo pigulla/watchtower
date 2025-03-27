@@ -4,6 +4,7 @@ export enum DefenseUpgrade {
     DEFENSE_PERCENT = 'Defense %',
     DEFENSE_ABSOLUTE = 'Defense Absolute',
 }
+
 export enum AttackUpgrade {
     DAMAGE = 'Damage',
     ATTACK_SPEED = 'Attack Speed',
@@ -12,13 +13,32 @@ export enum AttackUpgrade {
 }
 
 export enum Sound {
-    GAME_OVER = 'game-over.wav',
-    GEM_COLLECTED = 'gem-collected.wav',
-    START = 'start.mp3',
-    PERK_AVAILABLE = 'perk-available.mp3',
+    GAME_OVER = 'game over',
+    GEM_COLLECTED = 'gem collected',
+    ERROR = 'error',
+    START = 'start',
+    PERK_AVAILABLE = 'perk available',
+    AD_GEM_DETECTED = 'ad gem available',
+}
+
+export enum Event {
+    NEW_PERK_AVAILABLE = 'perk-available',
+    AD_GEM_AVAILABLE = 'ad-gem-available',
 }
 
 export type Upgrade = AttackUpgrade | DefenseUpgrade
+
+export const UPGRADE_MAXED = Symbol('upgrade-maxed')
+
+export function tabOf(upgrade: Upgrade): Tab {
+    if (Object.values<string>(AttackUpgrade).includes(upgrade)) {
+        return Tab.ATTACK_UPGRADES
+    } else if (Object.values<string>(DefenseUpgrade).includes(upgrade)) {
+        return Tab.DEFENSE_UPGRADES
+    }
+
+    throw new Error(`Unknown upgrade '${upgrade}'`)
+}
 
 export type RGB = readonly [number, number, number]
 

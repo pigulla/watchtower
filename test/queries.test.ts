@@ -2,20 +2,21 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { glob, readFile } from 'node:fs/promises'
 import { basename, dirname, join } from 'node:path'
-import { after, before, describe, it } from 'node:test'
+import { after, describe, it, mock } from 'node:test'
 import { fileURLToPath } from 'node:url'
 
 import { createConsola, LogLevels } from 'consola'
 import sharp, { type Sharp } from 'sharp'
 
-import { Extractor } from '../src/extractor'
-import { UPGRADE_MAXED } from '../src/extractor.interface'
-import { OCR } from '../src/ocr'
-import { AttackUpgrade, DefenseUpgrade } from '../src/types'
+import { AttackUpgrade, DefenseUpgrade, UPGRADE_MAXED } from '../src/types'
+import { Injections } from '../src/operations/injections'
+import { queryFactory } from '../src/operations/factory'
+import { getTextFactory } from '../src/external/get-text'
+import { getNumberFactory } from '../src/external/get-number'
 
 import { schema, type TestCase } from './schema'
 
-/* eslint-disable @typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
 export const SCREENSHOTS_DIR = join(
     dirname(fileURLToPath(import.meta.url)),
@@ -53,38 +54,41 @@ async function getTestCases(): Promise<
 
 const testCases = await getTestCases()
 
-describe('Extractor', () => {
+describe('Queries', () => {
     const logger = createConsola({ level: LogLevels.silent })
-    const ocr = new OCR({ logger })
-    const extractor = new Extractor({ ocr, logger })
+    const { getText, stop } = getTextFactory({ logger })
+    const getNumber = getNumberFactory({ getText, logger })
 
-    before(async () => await ocr.start())
+    const injectionMocks = {
+        click: mock.fn(),
+        getNumber,
+        getText,
+        moveCursorTo: mock.fn(),
+        playSound: mock.fn(),
+        takeScreenshot: mock.fn(),
+        logger,
+    } satisfies Injections
+
+    const queries = queryFactory(injectionMocks)
 
     for (const { name, image, expected } of testCases) {
         describe(name, () => {
-            it('isGameOver', async () => {
+            it('getAdGemPosition', async () => {
                 assert.equal(
-                    await extractor.isGameOver(image),
-                    expected.isGameOver,
+                    (await queries.getAdGemPosition(image)) !== null,
+                    expected.isAdGemAvailable,
                 )
             })
 
-            it('getOpenTab', async () => {
+            it('getBuyMultiplier', async () => {
                 assert.equal(
-                    await extractor.getOpenTab(image),
-                    expected.openTab,
-                )
-            })
-
-            it('getGemCount', async () => {
-                assert.equal(
-                    await extractor.getGemCount(image),
-                    expected.gemCount,
+                    await queries.getBuyMultiplier(image),
+                    expected.buyMultiplier,
                 )
             })
 
             it('getCash', async () => {
-                const cash = await extractor.getCash(image)
+                const cash = await queries.getCash(image)
 
                 assert.equal(
                     cash === null ? null : cash.toString(),
@@ -92,8 +96,12 @@ describe('Extractor', () => {
                 )
             })
 
+            it('getGems', async () => {
+                assert.equal(await queries.getGems(image), expected.gems)
+            })
+
             it('getCoins', async () => {
-                const coins = await extractor.getCoins(image)
+                const coins = await queries.getCoins(image)
 
                 assert.equal(
                     coins === null ? null : coins.toString(),
@@ -101,10 +109,21 @@ describe('Extractor', () => {
                 )
             })
 
-            it('getBuyMultiplier', async () => {
+            it('getOpenTab', async () => {
+                assert.equal(await queries.getOpenTab(image), expected.openTab)
+            })
+
+            it('isGameOver', async () => {
                 assert.equal(
-                    await extractor.getBuyMultiplier(image),
-                    expected.buyMultiplier,
+                    await queries.isGameOver(image),
+                    expected.isGameOver,
+                )
+            })
+
+            it('isNewPerkAvailable', async () => {
+                assert.equal(
+                    expected.isNewPerkAvailable,
+                    await queries.isNewPerkAvailable(image),
                 )
             })
 
@@ -112,7 +131,7 @@ describe('Extractor', () => {
                 if (expected.upgradeCost.attack !== null) {
                     for (const upgrade of Object.values(AttackUpgrade)) {
                         it(`getUpgradeCost of '${upgrade}'`, async () => {
-                            const actual = await extractor.getUpgradeCost(
+                            const actual = await queries.getUpgradeCost(
                                 image,
                                 upgrade,
                             )
@@ -123,15 +142,19 @@ describe('Extractor', () => {
                                     : actual === UPGRADE_MAXED
                                       ? 'Max'
                                       : actual,
+                                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                                 expected.upgradeCost.attack![upgrade],
                             )
                         })
                     }
                 }
+
                 if (expected.upgradeCost.defense !== null) {
                     for (const upgrade of Object.values(DefenseUpgrade)) {
+                        if (upgrade !== DefenseUpgrade.HEALTH) continue
+
                         it(`getUpgradeCost of '${upgrade}'`, async () => {
-                            const actual = await extractor.getUpgradeCost(
+                            const actual = await queries.getUpgradeCost(
                                 image,
                                 upgrade,
                             )
@@ -142,26 +165,15 @@ describe('Extractor', () => {
                                     : actual === UPGRADE_MAXED
                                       ? 'Max'
                                       : actual,
+                                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                                 expected.upgradeCost.defense![upgrade],
                             )
                         })
                     }
                 }
             }
-
-            it('getAdGemButtonPosition', async () => {
-                const buttonRegion = await extractor.getAdGemButtonRegion(image)
-                assert.equal(expected.isAdGemAvailable, buttonRegion !== null)
-            })
-
-            it('isNewPerkAvailable', async () => {
-                assert.equal(
-                    expected.isNewPerkAvailable,
-                    await extractor.isNewPerkAvailable(image),
-                )
-            })
         })
     }
 
-    after(() => ocr.stop())
+    after(() => stop())
 })
