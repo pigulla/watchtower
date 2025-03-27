@@ -3,7 +3,7 @@
   "isMenuOpen": false,
   "wave": 300,
   "isGameOver": false,
-  "gemCount": 11,
+  "gems": 11,
   "cash": "7390000",
   "coins": "155960000000",
   "isAdGemAvailable": true,
