@@ -54,7 +54,7 @@ export const uiConfig = {
         gemCounter: {
             left: 100,
             top: 270,
-            width: 130,
+            width: 135,
             height: 53,
         },
         perkProgress: {
@@ -62,6 +62,22 @@ export const uiConfig = {
             top: 90,
             width: 429,
             height: 67,
+        },
+        wave: {
+            regions: [
+                {
+                    left: 810,
+                    top: 1187,
+                    width: 287,
+                    height: 61,
+                },
+                {
+                    left: 810,
+                    top: 1931,
+                    width: 287,
+                    height: 61,
+                },
+            ],
         },
     },
     adGem: {

@@ -113,6 +113,10 @@ describe('Queries', () => {
                 assert.equal(await queries.getOpenTab(image), expected.openTab)
             })
 
+            it('getWave', async () => {
+                assert.equal(await queries.getWave(image), expected.wave)
+            })
+
             it('isGameOver', async () => {
                 assert.equal(
                     await queries.isGameOver(image),

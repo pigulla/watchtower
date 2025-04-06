@@ -10,6 +10,7 @@ import { getCashFactory } from './query/get-cash'
 import { getCoinsFactory } from './query/get-coins'
 import { getGemsFactory } from './query/get-gems'
 import { getOpenTabFactory } from './query/get-open-tab'
+import { getWaveFactory } from './query/get-wave'
 import { isGameOverFactory } from './query/is-game-over'
 import { isNewPertAvailableFactory } from './query/is-new-perk-available'
 import { purchaseUpgradesFactory, Strategy } from './command/purchase-upgrades'
@@ -27,6 +28,7 @@ export function queryFactory(injections: Injections): Queries {
         getGems: getGemsFactory(injections),
         getOpenTab: getOpenTabFactory(injections),
         getUpgradeCost: getUpgradeCostFactory(injections),
+        getWave: getWaveFactory(injections),
         isGameOver: isGameOverFactory(injections),
         isNewPerkAvailable: isNewPertAvailableFactory(injections),
     }

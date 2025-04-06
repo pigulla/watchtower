@@ -5,6 +5,7 @@ import type { GetCoins } from './get-coins'
 import type { GetGems } from './get-gems'
 import type { GetOpenTab } from './get-open-tab'
 import type { GetUpgradeCost } from './get-upgrade-cost'
+import type { GetWave } from './get-wave'
 import type { IsGameOver } from './is-game-over'
 import type { IsNewPerkAvailable } from './is-new-perk-available'
 
@@ -16,6 +17,7 @@ export type Queries = {
     readonly getGems: GetGems
     readonly getOpenTab: GetOpenTab
     readonly getUpgradeCost: GetUpgradeCost
+    readonly getWave: GetWave
     readonly isGameOver: IsGameOver
     readonly isNewPerkAvailable: IsNewPerkAvailable
 }

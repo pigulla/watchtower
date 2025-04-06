@@ -9,9 +9,14 @@ import { sleep } from './util/sleep'
 import { Config } from './config'
 import { Sound } from './types'
 import dayjs from 'dayjs'
+import { JsonObject } from 'type-fest'
+import { formatNumber } from './util/format-number'
 
 type State = {
+    cash: bigint | null
+    coins: bigint | null
     gems: number | null
+    wave: number | null
 }
 
 export async function auto({
@@ -22,7 +27,7 @@ export async function auto({
         playSound,
         sendMail,
     },
-    queries: { getGems, isGameOver },
+    queries: { getGems, isGameOver, getWave, getCash, getCoins },
     commands: {
         collectAdGem,
         collectFloatingGem,
@@ -39,17 +44,24 @@ export async function auto({
     logger: ConsolaInstance
 }): Promise<void> {
     const state: State = {
+        cash: null,
+        coins: null,
         gems: null,
+        wave: null,
     }
 
     const app = new App()
         .get('/', (_request, response) => {
-            response.send(state)
+            response.send({
+                ...state,
+                cash: state.cash ? formatNumber(state.cash) : null,
+                coins: state.coins ? formatNumber(state.coins) : null,
+            } satisfies JsonObject)
         })
         .listen(
             server.port,
             () => {
-                logger.info(`Server listening`)
+                logger.info(`Server listening on port ${server.port}`)
             },
             server.interface,
         )
@@ -59,8 +71,18 @@ export async function auto({
 
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         while (true) {
-            logger.debug('Running in auto mode')
             screenshot = await takeScreenshot()
+
+            const [cash, coins, gems, wave] = await Promise.all([
+                getCash(screenshot),
+                getCoins(screenshot),
+                getGems(screenshot),
+                getWave(screenshot),
+            ])
+
+            logger.debug(
+                `Running in auto mode${state.wave === null ? '' : ` (wave ${state.wave})`}`,
+            )
 
             if (await isGameOver(screenshot)) {
                 logger.success('Game is over')
@@ -82,12 +104,14 @@ export async function auto({
                 .then(purchaseUpgrades)
                 .then(moveToIdlePosition)
 
-            const gems = await getGems(screenshot)
-
             if (gems !== null && state.gems !== gems) {
                 logger.info(`Gem count is ${gems}`)
-                state.gems = gems
             }
+
+            state.cash = cash
+            state.coins = coins
+            state.gems = gems
+            state.wave = wave
 
             logger.trace(`Waiting for ${interval.asSeconds()} second(s)`)
             await sleep(interval.asMilliseconds())

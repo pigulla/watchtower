@@ -35,28 +35,29 @@
     "ndarray": "1.0.19",
     "nodemailer": "6.10.0",
     "read-pkg": "9.0.1",
-    "sharp": "0.33.5",
+    "sharp": "0.34.0",
     "tesseract.js": "6.0.0",
     "zod": "3.24.2"
   },
   "devDependencies": {
     "@commander-js/extra-typings": "13.1.0",
-    "@eslint/js": "9.23.0",
+    "@eslint/js": "9.24.0",
     "@swc-node/register": "1.10.10",
     "@types/config": "3.3.5",
     "@types/ndarray": "1.0.14",
-    "@types/node": "22.13.14",
+    "@types/node": "22.14.0",
     "@types/nodemailer": "6.4.17",
     "depcheck": "1.4.7",
-    "eslint": "9.23.0",
+    "eslint": "9.24.0",
     "eslint-plugin-unicorn": "58.0.0",
     "globals": "16.0.0",
     "lockfile-lint": "4.14.0",
     "prettier": "3.5.3",
     "sort-package-json": "3.0.0",
     "tsx": "4.19.3",
-    "typescript": "5.8.2",
-    "typescript-eslint": "8.28.0"
+    "type-fest": "4.39.1",
+    "typescript": "5.8.3",
+    "typescript-eslint": "8.29.0"
   },
   "engines": {
     "node": ">=22"
