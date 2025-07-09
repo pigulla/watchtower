@@ -16,11 +16,11 @@ export const uiConfig = {
         position: {
             withTabsOpen: {
                 x: 789,
-                y: 544,
+                y: 580,
             },
             withTabsClosed: {
                 x: 789,
-                y: 753,
+                y: 789,
             },
         },
     },

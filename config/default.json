@@ -16,7 +16,7 @@
     "screencapture": "/usr/sbin/screencapture"
   },
   "server": {
-    "port": 7777,
+    "port": 6666,
     "interface": "0.0.0.0"
   },
   "email": {
