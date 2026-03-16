@@ -12,7 +12,7 @@ import { getGemsFactory } from './query/get-gems'
 import { getOpenTabFactory } from './query/get-open-tab'
 import { getWaveFactory } from './query/get-wave'
 import { isGameOverFactory } from './query/is-game-over'
-import { isNewPertAvailableFactory } from './query/is-new-perk-available'
+import { isNewPerkAvailableFactory } from './query/is-new-perk-available'
 import { purchaseUpgradesFactory, Strategy } from './command/purchase-upgrades'
 import { getAdGemPositionFactory } from './query/get-ad-gem-position'
 import { getUpgradeCostFactory } from './query/get-upgrade-cost'
@@ -30,7 +30,7 @@ export function queryFactory(injections: Injections): Queries {
         getUpgradeCost: getUpgradeCostFactory(injections),
         getWave: getWaveFactory(injections),
         isGameOver: isGameOverFactory(injections),
-        isNewPerkAvailable: isNewPertAvailableFactory(injections),
+        isNewPerkAvailable: isNewPerkAvailableFactory(injections),
     }
 }
 

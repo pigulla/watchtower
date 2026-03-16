@@ -8,7 +8,6 @@ import type { Queries } from './operations/query/queries'
 import { sleep } from './util/sleep'
 import { Config } from './config'
 import { Sound } from './types'
-import dayjs from 'dayjs'
 import { JsonObject } from 'type-fest'
 import { formatNumber } from './util/format-number'
 
@@ -25,7 +24,6 @@ export async function auto({
         takeScreenshot,
         stop,
         playSound,
-        sendMail,
     },
     queries: { getGems, isGameOver, getWave, getCash, getCoins },
     commands: {
@@ -34,7 +32,7 @@ export async function auto({
         purchaseUpgrades,
         moveToIdlePosition,
     },
-    config: { interval, mailOnGameOver, server },
+    config: { interval, server },
     logger,
 }: {
     externals: Externals
@@ -87,13 +85,6 @@ export async function auto({
             if (await isGameOver(screenshot)) {
                 logger.success('Game is over')
                 await playSound(Sound.GAME_OVER)
-
-                if (mailOnGameOver) {
-                    await sendMail({
-                        subject: 'Game is over',
-                        text: `The game terminated on ${dayjs().format()}`,
-                    })
-                }
                 break
             }
 

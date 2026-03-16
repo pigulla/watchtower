@@ -60,7 +60,7 @@ export function takeScreenshotFactory({
 
         const title = await getText(
             screenshot,
-            { left: 500, top: 5, width: width * 2 - 2 * 500, height: 50 },
+            { left: 150, top: 5, width: 300, height: 50 },
             { mode: OCRMode.SINGLE_LINE, characters: LETTERS },
         )
 

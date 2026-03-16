@@ -14,7 +14,6 @@ import {
 } from './is-application-active'
 import { type GetNumber, getNumberFactory } from './get-number'
 import { activateApplicationFactory } from './activate-application'
-import { SendMail, sendMailFactory } from './send-mail'
 
 export type Externals = {
     activateApplication: () => Promise<void>
@@ -26,7 +25,6 @@ export type Externals = {
     playSound: PlaySound
     stop: () => Promise<void>
     takeScreenshot: TakeScreenshot
-    sendMail: SendMail
 }
 
 export function externalsFactory({
@@ -66,6 +64,5 @@ export function externalsFactory({
         stop,
         getNumber: getNumberFactory({ getText, logger }),
         activateApplication: activateApplicationFactory({ config, logger }),
-        sendMail: sendMailFactory({ config, logger }),
     }
 }

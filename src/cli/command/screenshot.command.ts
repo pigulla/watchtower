@@ -19,7 +19,6 @@ export const screenshotCommand = new Command<[], {}, GlobalOptions>(
             logLevel: options.verbose,
             volume: options.silent ? null : options.volume,
             interval: dayjs.duration(0, 'seconds'),
-            mailOnGameOver: false,
         })
         const logger = createConsola({
             level: config.logLevel,

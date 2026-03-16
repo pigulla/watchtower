@@ -6,7 +6,6 @@ import { externalsFactory } from '../../external/factory'
 import { factory as operationsFactory } from '../../operations/factory'
 import { getConfig } from '../../config'
 import { interval } from '../option/interval.option'
-import { mailOnGameOver } from '../option/mail-on-game-over.option'
 import { notifyOn } from '../option/notifiy-on.option'
 import { watch } from '../../watch'
 import { Strategy } from '../../operations/command/purchase-upgrades'
@@ -14,7 +13,6 @@ import { Strategy } from '../../operations/command/purchase-upgrades'
 export const watchCommand = new Command<[], {}, GlobalOptions>('watch')
     .addOption(notifyOn)
     .addOption(interval)
-    .addOption(mailOnGameOver)
     .option('-r, --repeat', 'Repeat alerts each iteration.')
     .description('Watch the game and notify on important events.')
     .action(async function (): Promise<void> {
@@ -23,7 +21,6 @@ export const watchCommand = new Command<[], {}, GlobalOptions>('watch')
             logLevel: options.verbose,
             volume: options.silent ? null : options.volume,
             interval: options.interval,
-            mailOnGameOver: options.mailOnGameOver,
         })
         const logger = createConsola({
             level: config.logLevel,

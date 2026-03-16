@@ -8,7 +8,7 @@ import { Query } from './query'
 
 export type IsNewPerkAvailable = Query<boolean>
 
-export function isNewPertAvailableFactory({
+export function isNewPerkAvailableFactory({
     getText,
 }: Injections): IsNewPerkAvailable {
     return async function isNewPerkAvailable(

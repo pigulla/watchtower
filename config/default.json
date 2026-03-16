@@ -1,24 +1,22 @@
 {
-  "application": {
-    "title": "The Tower",
-    "name": "TheTower",
-    "isRetina": true,
-    "size": {
-      "width": 788,
-      "height": 1079
+    "application": {
+        "title": "The Tower",
+        "name": "TheTower",
+        "isRetina": true,
+        "size": {
+            "width": 788,
+            "height": 1079
+        }
+    },
+    "binary": {
+        "afplay": "/usr/bin/afplay",
+        "cliclick": "/opt/homebrew/bin/cliclick",
+        "osascript": "/usr/bin/osascript",
+        "pngpaste": "/opt/homebrew/bin/pngpaste",
+        "screencapture": "/usr/sbin/screencapture"
+    },
+    "server": {
+        "port": 6666,
+        "interface": "0.0.0.0"
     }
-  },
-  "binary": {
-    "afplay": "/usr/bin/afplay",
-    "cliclick": "/opt/homebrew/bin/cliclick",
-    "osascript": "/usr/bin/osascript",
-    "pngpaste": "/opt/homebrew/bin/pngpaste",
-    "screencapture": "/usr/sbin/screencapture"
-  },
-  "server": {
-    "port": 6666,
-    "interface": "0.0.0.0"
-  },
-  "email": {
-  }
 }
